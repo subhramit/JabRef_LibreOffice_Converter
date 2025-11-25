@@ -53,7 +53,10 @@ End Sub
 &apos;************************* Replace JabRef reference field with cite key***************************
 Sub FromTextToReference
 	&apos; Read the selected mode from radio buttons
-	If dia.getControl(&quot;optCslMode&quot;).State = 1 Then
+	Dim oCslRadio As Object
+	oCslRadio = dia.getControl(&quot;optCslMode&quot;).Model
+
+	If oCslRadio.State = 1 Then
 		useCslMode = True
 	Else
 		useCslMode = False
@@ -161,6 +164,7 @@ Sub subEventReference(j, l, k as integer)
 	Dim i As Integer, oRefmarks, oRefmarkNames()
 	Dim citeKey as string
 	Dim cleanKey as string
+	Dim isPlainCite as Boolean
 
 	oDoc = ThisComponent
 	oRefMarks = oDoc.Referencemarks
@@ -173,13 +177,16 @@ Sub subEventReference(j, l, k as integer)
 		citeKey = Mid(oSel.getString, 7)
 		citeKey = Left(citeKey, Len(citeKey) - 1)
 
-		&apos; Count empty citations
+		&apos; Determine if this is a plain cite (no _1_, _2_, _3_ markers)
+		isPlainCite = (InStr(citeKey, &quot;_1_&quot;) = 0 And InStr(citeKey, &quot;_2_&quot;) = 0 And InStr(citeKey, &quot;_3_&quot;) = 0)
+
+		&apos; Count citations
 		If InStr(citeKey, &quot;_3_&quot;) &lt;&gt; 0 Then
-			j = j + 1
-		End If
-		&apos; Count in-text citations
-		If InStr(citeKey, &quot;_2_&quot;) &lt;&gt; 0 Or InStr(citeKey, &quot;_1_&quot;) &lt;&gt; 0 Then
-			k = k + 1
+			j = j + 1  &apos; Empty citations
+		ElseIf InStr(citeKey, &quot;_2_&quot;) &lt;&gt; 0 Or InStr(citeKey, &quot;_1_&quot;) &lt;&gt; 0 Then
+			k = k + 1  &apos; In-text citations with markers
+		ElseIf isPlainCite Then
+			l = l + 1  &apos; Plain citations without markers
 		End If
 
 		&apos; Create reference mark in selected format
@@ -199,7 +206,7 @@ Sub subEventReference(j, l, k as integer)
 			b = b + 1
 		Else
 			&apos; JStyle format: JR_cite[counter]_[type]_[key]
-			If InStr(citeKey, &quot;_1_&quot;) = 0 And InStr(citeKey, &quot;_2_&quot;) = 0 And InStr(citeKey, &quot;_3_&quot;) = 0 Then
+			If isPlainCite Then
 				sSelection = &quot;JR_cite&quot; + CStr(b) + &quot;_1_&quot; + citeKey
 
 				&apos; Check for duplicates
@@ -209,7 +216,6 @@ Sub subEventReference(j, l, k as integer)
 						sSelection = &quot;JR_cite&quot; + CStr(b) + &quot;_1_&quot; + citeKey
 					End If
 				Next
-				l = l + 1
 			Else
 				sSelection = &quot;JR_cite&quot; + citeKey
 			End If
