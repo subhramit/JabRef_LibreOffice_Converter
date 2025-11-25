@@ -6,8 +6,8 @@
    <dlg:title dlg:value="Reference Mark Format"/>
   </dlg:titledbox>
   <dlg:radiogroup>
-   <dlg:radio dlg:id="optJstyleMode" dlg:tab-index="5" dlg:left="20" dlg:top="25" dlg:width="90" dlg:height="12" dlg:value="JStyle (JR_cite)" dlg:checked="true"/>
-   <dlg:radio dlg:id="optCslMode" dlg:tab-index="6" dlg:left="120" dlg:top="25" dlg:width="90" dlg:height="12" dlg:value="CSL (JABREF_)"/>
+   <dlg:radio dlg:id="optCslMode" dlg:tab-index="5" dlg:left="20" dlg:top="25" dlg:width="90" dlg:height="12" dlg:value="CSL (JABREF_)" dlg:checked="true"/>
+   <dlg:radio dlg:id="optJstyleMode" dlg:tab-index="6" dlg:left="120" dlg:top="25" dlg:width="90" dlg:height="12" dlg:value="JStyle (JR_cite)"/>
   </dlg:radiogroup>
 
   <dlg:text dlg:id="Label2" dlg:tab-index="3" dlg:left="6" dlg:top="47" dlg:width="214" dlg:height="11" dlg:page="2" dlg:value=" \cite{bibtexkey} --&gt; JabRef reference field (if you want to work with a *.doc)" dlg:align="center"/>
